@@ -9,7 +9,7 @@ from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
-from cdp_langchain import CdpTool
+from cdp_langchain.tools import CdpTool
 
 # Import CDP Agentkit Langchain Extension.
 from cdp_langchain.agent_toolkits import CdpToolkit
@@ -19,7 +19,7 @@ from cdp import Wallet
 wallet_data_file = "wallet_data.txt"
 load_dotenv()
 REBALANCE_LIQUIDITY_PROMPT = """
-This tool creates or rebalances a Uniswap V3 liquidity position on Base mainnet.
+This tool creates or rebalances a Uniswap V3 liquidity position on Base sepolia.
 If your agent’s wallet has never created a liquidity position in the specified pool, the tool will:
   1. Check that the required ERC-20 token approvals for token0 and token1 are in place (triggering approval transactions if needed).
   2. Call the NonfungiblePositionManager contract’s mint method to create a new liquidity position with the given tick range.
@@ -42,7 +42,7 @@ class RebalanceLiquidityInput(BaseModel):
     )
     pool: str = Field(
         ...,
-        description="The address of the Uniswap V3 pool on Base mainnet.",
+        description="The address of the Uniswap V3 pool on Base sepolia.",
         example="0x1234567890abcdef1234567890abcdef12345678"
     )
     token0: str = Field(
@@ -98,8 +98,8 @@ def rebalance_liquidity(
     Returns:
         str: A status message indicating the result.
     """
-    # NonfungiblePositionManager contract address on Base mainnet
-    NM_POSITION_MANAGER = "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1"
+    # NonfungiblePositionManager contract address on Base sepolia
+    NM_POSITION_MANAGER = "0x27F971cb582BF9E50F397e4d29a5C7A34f11faA2"
     fee = 3000  # Assuming a fee tier of 0.3%
     deadline = 9999999999  # Use a sufficiently high deadline (or calculate based on current time)
 
